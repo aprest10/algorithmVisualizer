@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!--  Metadata  -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Andrew Preston" />
+    <meta
+      name="description"
+      content="A web application that allows the user to visualize different algorithms."
+    />
+    <meta
+      name="keywords"
+      content="Pathfinder, Pathfinding, Sorting, Minimum Spanning Tree"
+    />
+
+    <!--  Title  -->
+    <title>Algorithms Visualizer</title>
+
+    <!--  Favicon  -->
+    <link rel="icon" href="styles/images/favicon.ico" sizes="any" />
+    <link rel="icon" href="styles/images/favicon.svg" type="images/svg+xml" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <!--  Styles  -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+    />
+    <link rel="stylesheet" href="styles/mdb.min.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link rel="stylesheet" type="text/css" href="styles/styles.css" />
+
+    <!--  Scripts - All deferred to increase loading speed  -->
+    <script defer type="text/javascript" src="./scripts/mdb.min.js"></script>
+    <script defer type="text/javascript" src="scripts/node.js"></script>
+    <script defer type="text/javascript" src="scripts/grid.js"></script>
+    <script defer type="text/javascript" src="scripts/bfs.js"></script>
+    <script defer type="text/javascript" src="scripts/dfs.js"></script>
+    <script defer type="text/javascript" src="scripts/dijkstra.js"></script>
+    <script defer type="text/javascript" src="scripts/astar.js"></script>
+    <script
+      defer
+      type="text/javascript"
+      src="scripts/bidirectional.js"
+    ></script>
+    <script defer type="text/javascript" src="scripts/greedybest.js"></script>
+    <script defer type="text/javascript" src="scripts/common.js"></script>
+    <script
+      defer
+      type="text/javascript"
+      src="scripts/primmazegenerator.js"
+    ></script>
+    <script
+      defer
+      type="text/javascript"
+      src="scripts/recursivebacktracker.js"
+    ></script>
+    <script defer type="text/javascript" src="scripts/app.js"></script>
+    <script defer type="text/javascript" src="scripts/vertix.js"></script>
+    <script defer type="text/javascript" src="scripts/canvas.js"></script>
+    <script
+      defer
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.js"
+    ></script>
+    <script defer type="text/javascript" src="scripts/network.js"></script>
+  </head>
+
+  <body>
+    <!------------------------------ Tabs ------------------------------>
+    <ul class="nav nav-tabs nav-justified" id="tabs" role="tablist">
+      <!-- Tab 1 - PathFinder -->
+      <li class="nav-item" role="presentation">
+        <a
+          class="nav-link active"
+          id="path-finder"
+          data-toggle="tab"
+          role="tab"
+          aria-controls="ex3-tabs-1"
+          aria-selected="true"
+          href="#path-finder-tab"
+        >
+          PathFinder
+        </a>
+      </li>
+      <!-- Tab 2 - MST -->
+      <li class="nav-item" role="presentation">
+        <a
+          class="nav-link"
+          id="minimum-spanning-tree"
+          data-toggle="tab"
+          role="tab"
+          aria-controls="ex3-tabs-2"
+          aria-selected="false"
+          href="#minimum-spanning-tree-tab"
+        >
+          Minimum Spanning Trees
+        </a>
+      </li>
+      <!-- Tab 3 - Sorting -->
+      <li class="nav-item" role="presentation">
+        <a
+          class="nav-link"
+          id="topological-sort"
+          data-toggle="tab"
+          role="tab"
+          aria-controls="ex3-tabs-3"
+          aria-selected="false"
+          href="#topological-sort-tab"
+        >
+          Topological Sorting
+        </a>
+      </li>
+    </ul>
+
+    <!-------------------------- Tab Content --------------------------->
+    <div class="tab-content" id="ex2-content">
+      <!-- Tab 1 - PathFinder -->
+      <div
+        class="tab-pane fade show active"
+        id="path-finder-tab"
+        role="tabpanel"
+        aria-labelledby="ex3-tab-1"
+      >
+        <!--  Header  -->
+        <header>
+          <nav
+            class="buttons-container navbar navbar-expand-lg navbar-dark bg-dark"
+          >
+            <!-- PathFinder Navbar -->
+            <div class="container-fluid">
+              <!-- Navbar Title -->
+              <span class="navbar-brand"> Path Finding Algorithms </span>
+              <!-- Toggle button -->
+              <button
+                class="navbar-toggler"
+                type="button"
+                data-toggle="collapse"
+                data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+              >
+                <span
+                  class="navbar-toggler-icon"
+                  id="breakpoint-toggler"
+                ></span>
+              </button>
+              <!-- Menu -->
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <!-- Links -->
+                <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+                  <!-- Navbar dropdowns -->
+                  <li class="nav-item">
+                    <!-- PathFinder dropdown -->
+                    <div class="btn-group shadow-5">
+                      <button
+                        type="button"
+                        class="btn btn-outline-info mr-2 dropdown-toggle mt-2"
+                        data-ripple-color="dark"
+                        id="path-finding-grp-btn"
+                        data-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        Path Finding Algorithms
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li>
+                          <a class="dropdown-item" id="astar"
+                            >A* (Manhattan Distance)</a
+                          >
+                        </li>
+                        <li>
+                          <a class="dropdown-item" id="bfs"
+                            >Breath-First Search (BFS)</a
+                          >
+                        </li>
+                        <li>
+                          <a class="dropdown-item" id="dfs"
+                            >Depth-First Search (DFS)</a
+                          >
+                        </li>
+                        <li>
+                          <a class="dropdown-item" id="dijkstra">Dijkstra</a>
+                        </li>
+                        <li>
+                          <a class="dropdown-item" id="greedybest"
+                            >Greedy Best-first (Manhattan Distance)</a
+                          >
+                        </li>
+                        <li><hr /></li>
+                        <li>
+                          <a class="dropdown-item" id="bidirectional-astar"
+                            >Bidirectional A*</a
+                          >
+                        </li>
+                        <li>
+                          <a class="dropdown-item" id="bidirectional-bfs"
+                            >Bidirectional BFS</a
+                          >
+                        </li>
+                        <li>
+                          <a class="dropdown-item" id="bidirectional-dijkstra"
+                            >Bidirectional Dijkstra</a
+                          >
+                        </li>
+                        <li>
+                          <a class="dropdown-item" id="bidirectional-greedy-bfs"
+                            >Bidirectional Greedy Best-first</a
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                    <!-- Maze dropdown -->
+                    <div class="btn-group shadow-0">
+                      <button
+                        type="button"
+                        class="btn btn-outline-info mr-2 dropdown-toggle mt-2"
+                        data-toggle="dropdown"
+                        id="maze-generation-grp-btn"
+                        aria-expanded="false"
+                      >
+                        Random Maze Generation
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li class="dropdown-divide-title"><u>Real Time</u></li>
+                        <li>
+                          <a
+                            class="dropdown-item"
+                            id="maze-recursive-backtracker"
+                            >Recursive Backtracker</a
+                          >
+                        </li>
+                        <li>
+                          <a class="dropdown-item" id="maze-prim"
+                            >Prim's Algorithm</a
+                          >
+                        </li>
+                        <li><hr /></li>
+                        <li class="dropdown-divide-title"><u>Animated</u></li>
+                        <li>
+                          <a
+                            class="dropdown-item"
+                            id="maze-animation-recursive-backtracker"
+                            >Recursive Backtracker</a
+                          >
+                        </li>
+                        <li>
+                          <a class="dropdown-item" id="maze-prim-animation"
+                            >Prim's Algorithm</a
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                  </li>
+                  <!--  Visualize Button  -->
+                  <li class="nav-item">
+                    <button
+                      disabled
+                      type="button"
+                      class="btn btn-outline-danger mr-2 ml-1 mt-2"
+                      data-ripple-color="light"
+                      id="visualize"
+                    >
+                      Visualize
+                    </button>
+                  </li>
+                  <!--  Clear Path Button  -->
+                  <li class="nav-item">
+                    <button
+                      disabled
+                      type="button"
+                      class="btn btn-outline-warning mr-2 ml-1 mt-2"
+                      data-ripple-color="light"
+                      id="clear-path"
+                    >
+                      Clear Path
+                    </button>
+                  </li>
+                  <!--  Clear All Button  -->
+                  <li class="nav-item">
+                    <button
+                      disabled
+                      type="button"
+                      class="btn btn-outline-warning mr-2 ml-1 mt-2"
+                      data-ripple-color="light"
+                      id="clear"
+                    >
+                      Clear All
+                    </button>
+                  </li>
+                </ul>
+                <!--  Node Size Slider  -->
+                <ul class="nav-item">
+                  <label class="text-warning">Node Size:</label>
+                  <input
+                    name="grid-size"
+                    type="range"
+                    class="form-range"
+                    id="size-slider"
+                    value="28"
+                    min="19"
+                    max="90"
+                  />
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </header>
+        <!--  Body of Tab 1  -->
+        <main>
+          <!--  Legend  -->
+          <section id="grid-helper">
+            <!--  Start Node  -->
+            <div class="helper-node-container">
+              <div
+                data-toggle="tooltip"
+                data-html="true"
+                title="<u>Click and drag</u> Icon on the grid"
+                id="start-node"
+              ></div>
+              <div>Start Node</div>
+            </div>
+            <!--  End Node  -->
+            <div class="helper-node-container">
+              <div
+                data-toggle="tooltip"
+                data-html="true"
+                title="<u>Click and drag</u> Icon on the grid"
+                id="end-node"
+              ></div>
+              <div>End Node</div>
+            </div>
+            <!--  Unvisited Node  -->
+            <div class="helper-node-container">
+              <div id="unvisited-node" class="justify-node"></div>
+              <div>Unvisited Node</div>
+            </div>
+            <!--  Weight Node  -->
+            <div class="helper-node-container">
+              <div
+                data-toggle="tooltip"
+                data-html="true"
+                title="<em><strong>Click+Shift/alt</strong></em> and <u><b>drag</u></b> to <b>Create</b><br/><em><strong>Right Click+Shift/alt</strong></em> and <u><b>drag</u></b>  to <b>Remove</b>"
+                id="weight-node"
+                class="justify-node"
+              ></div>
+              <div>Weight Node</div>
+            </div>
+            <!--  Wall Node  -->
+            <div class="helper-node-container">
+              <div
+                data-toggle="tooltip"
+                data-html="true"
+                title="<u>Click and drag</u> on the grid to create<br/><u>Right click and drag</u> on the grid to delete"
+                id="wall-node"
+                class="justify-node"
+              ></div>
+              <div>Wall Node</div>
+            </div>
+            <!--  Visited Nodes  -->
+            <div class="helper-node-container">
+              <div id="visited-container" class="justify-node">
+                <div id="visited-node-forward"></div>
+                <div id="visited-node-backward"></div>
+              </div>
+              <div>Visited Nodes</div>
+            </div>
+            <!--  Backtrack Node  -->
+            <div class="helper-node-container">
+              <div id="visited-node-backtrack" class="justify-node"></div>
+              <div>Backtrack Node</div>
+            </div>
+            <!--  Shortest Path  -->
+            <div class="helper-node-container">
+              <div id="shortest-path" class="justify-node"></div>
+              <div>Shortest Path</div>
+            </div>
+          </section>
+          <!--  Grid  -->
+          <section id="grid-container"></section>
+        </main>
+      </div>
+      <!-- Tab 2 - MST -->
+      <div
+        class="tab-pane fade"
+        id="minimum-spanning-tree-tab"
+        role="tabpanel"
+        aria-labelledby="ex3-tab-2"
+      >
+        <!--  Header  -->
+        <header>
+          <nav
+            class="buttons-container navbar navbar-expand-lg navbar-dark bg-dark"
+          >
+            <!-- MST Navbar -->
+            <div class="container-fluid">
+              <!-- Navbar Title -->
+              <span class="navbar-brand">Minimum Spanning Tree</span>
+              <!-- Toggle button -->
+              <button
+                class="navbar-toggler"
+                type="button"
+                data-toggle="collapse"
+                data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+              >
+                <span
+                  class="navbar-toggler-icon"
+                  id="breakpoint-toggler"
+                ></span>
+              </button>
+              <!-- Menu -->
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <!-- Links -->
+                <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <button
+                      id="clear-canvas"
+                      type="button"
+                      class="btn btn-outline-warning mr-4 ml-1 mt-2"
+                      data-ripple-color="light"
+                    >
+                      Clear Canvas
+                    </button>
+                  </li>
+                </ul>
+                <!--  Random Generator Slider  -->
+                <ul class="nav-item">
+                  <label class="text-warning"> Random Generator: </label>
+                  <input
+                    name="nodes-amount"
+                    type="range"
+                    class="form-range"
+                    id="nodes-slider"
+                    value="25"
+                    min="10"
+                    max="75"
+                  />
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </header>
+        <!--  Body of Tab 2  -->
+        <main>
+          <!--  Legend  -->
+          <section id="canvas-helper">
+            <div id="mst-helper">
+              <p class="lead">
+                You can create a Minimum Spanning Tree by clicking anywhere on
+                the canvas
+              </p>
+              <p class="lead">or use the 'Random Generator' slider.</p>
+              <p class="text-muted">
+                <kbd>Click</kbd> to <u><b>Add</b></u> |
+                <kbd>Right-Click</kbd> to <u><b>Remove</b></u
+                >.
+              </p>
+              <p class="text-muted">
+                Generated by <b><u>Prim's Algorithm</u></b> using
+                <b><u>Euclidean Distances</u></b> as weights of graph
+              </p>
+            </div>
+          </section>
+          <!--  Canvas  -->
+          <section id="canvas-container"></section>
+        </main>
+      </div>
+      <!-- Tab 3 - Sorting -->
+      <div
+        class="tab-pane fade"
+        id="topological-sort-tab"
+        role="tabpanel"
+        aria-labelledby="ex3-tab-3"
+      >
+        <!--  Header  -->
+        <header>
+          <nav
+            class="buttons-container navbar navbar-expand-lg navbar-dark bg-dark"
+          >
+            <!-- Sorting Navbar -->
+            <div class="container-fluid">
+              <!-- Navbar Title -->
+              <span class="navbar-brand">Topological Sort</span>
+            </div>
+          </nav>
+        </header>
+        <!--  Body of Tab 3  -->
+        <main>
+          <!--  Legend  -->
+          <section id="network-helper">
+            <div id="topological-helper">
+              <p class="lead">
+                Task Scheduling can be done via <em>Topological Sorting</em>.
+              </p>
+              <p class="text-muted">
+                Topological Sorting is useful for Directed Acyclic Graphs.
+              </p>
+              <p class="text-muted">
+                <em>Topological Sorting</em> using
+                <b><u>Kahn's Algorithm</u></b>
+              </p>
+            </div>
+          </section>
+          <!--  Canvas  -->
+          <section id="network-container">
+            <!--  Inputs  -->
+            <form name="tasks">
+              <!--  Text box's  -->
+              <div id="tasks-input">
+                <!--  Task 1  -->
+                <div
+                  id="task-1-input"
+                  class="row g-3 align-items-center mt-1 ml-2"
+                >
+                  <!--  Task  -->
+                  <div class="form-outline col-auto mb-2 mr-2">
+                    <input
+                      type="text"
+                      name="task-1"
+                      class="form-control"
+                      placeholder="Eat Lunch"
+                      aria-describedby="task-1"
+                      required
+                    />
+                    <label class="form-label" for="task-1">Task #1</label>
+                  </div>
+                  <!--  Prereqs  -->
+                  <div class="form-outline col-auto mb-2 mr-2">
+                    <input
+                      type="text"
+                      name="preq-1"
+                      class="form-control"
+                      placeholder="Drive to restaurant"
+                      aria-describedby="preq-1"
+                      required
+                    />
+                    <label class="form-label" for="preq-1"
+                      >Task #1 Prerequisites</label
+                    >
+                  </div>
+                  <!--  Additional info  -->
+                  <div class="col-auto mb-2 mr-2">
+                    <span id="textExample2" class="form-text mb-3">
+                      Separate prerequisites with commas
+                    </span>
+                  </div>
+                </div>
+                <!--  Task 2  -->
+                <div
+                  id="task-2-input"
+                  hidden
+                  class="row g-3 align-items-center ml-2"
+                >
+                  <!--  Task  -->
+                  <div class="form-outline col-auto mb-2 mr-2">
+                    <input
+                      type="text"
+                      name="task-2"
+                      class="form-control"
+                      placeholder="Brush Teeth"
+                      aria-describedby="task-1"
+                      required
+                    />
+                    <label class="form-label" for="task-2">Task #2</label>
+                  </div>
+                  <!--  Prereqs  -->
+                  <div class="form-outline mb-2 col-auto mb-2 mr-2">
+                    <input
+                      type="text"
+                      name="preq-2"
+                      class="form-control"
+                      placeholder="Shower"
+                      aria-describedby="preq-1"
+                      required
+                    />
+                    <label class="form-label" for="preq-2"
+                      >Task #2 Prerequisites</label
+                    >
+                  </div>
+                </div>
+                <!--  Task 3  -->
+                <div
+                  id="task-3-input"
+                  hidden
+                  class="row g-3 align-items-center ml-2"
+                >
+                  <!--  Task  -->
+                  <div class="form-outline col-auto mb-2 mr-2">
+                    <input
+                      type="text"
+                      name="task-3"
+                      placeholder="Get out of bed"
+                      class="form-control"
+                      aria-describedby="task-1"
+                      required
+                    />
+                    <label class="form-label" for="task-3">Task #3</label>
+                  </div>
+                  <!--  Prereqs  -->
+                  <div class="form-outline mb-2 col-auto mb-2 mr-2">
+                    <input
+                      type="text"
+                      name="preq-3"
+                      placeholder="Wakeup"
+                      class="form-control"
+                      aria-describedby="preq-1"
+                      required
+                    />
+                    <label class="form-label" for="preq-3"
+                      >Task #3 Prerequisites</label
+                    >
+                  </div>
+                </div>
+                <!--  Task 4  -->
+                <div
+                  id="task-4-input"
+                  hidden
+                  class="row g-3 align-items-center ml-2"
+                >
+                  <!--  Task  -->
+                  <div class="form-outline col-auto mb-2 mr-2">
+                    <input
+                      type="text"
+                      name="task-4"
+                      placeholder="Put on shoes"
+                      class="form-control"
+                      aria-describedby="task-1"
+                      required
+                    />
+                    <label class="form-label" for="task-4">Task #4</label>
+                  </div>
+                  <!--  Prereqs  -->
+                  <div class="form-outline col-auto mb-2 mr-2">
+                    <input
+                      type="text"
+                      name="preq-4"
+                      class="form-control"
+                      placeholder="Put on socks"
+                      aria-describedby="preq-1"
+                      required
+                    />
+                    <label class="form-label" for="preq-4"
+                      >Task #4 Prerequisites</label
+                    >
+                  </div>
+                </div>
+                <!--  Task 5  -->
+                <div
+                  id="task-5-input"
+                  hidden
+                  class="row g-3 align-items-center ml-2"
+                >
+                  <!--  Task  -->
+                  <div class="form-outline col-auto mb-2 mr-2">
+                    <input
+                      type="text"
+                      name="task-5"
+                      class="form-control"
+                      placeholder="Let's finish it with a cycle"
+                      aria-describedby="task-1"
+                      required
+                    />
+                    <label class="form-label" for="task-5">Task #5</label>
+                  </div>
+                  <!--  Prereqs  -->
+                  <div class="form-outline col-auto mb-2 mr-2">
+                    <input
+                      type="text"
+                      name="preq-5"
+                      class="form-control"
+                      placeholder="Let's finish it with a cycle"
+                      aria-describedby="preq-1"
+                      required
+                    />
+                    <label class="form-label" for="preq-5"
+                      >Task #5 Prerequisites</label
+                    >
+                  </div>
+                </div>
+              </div>
+              <!-- Buttons -->
+              <div id="tasks-submit" class="mb-2">
+                <!--  Add Task  -->
+                <button id="task-adder" class="btn btn-danger ml-2 mt-2">
+                  Add Task
+                </button>
+                <!--  Visualize  -->
+                <button id="network-visualizer" class="btn btn-danger mt-2">
+                  Visualize
+                </button>
+              </div>
+            </form>
+            <!--  Array Output  -->
+            <div id="result"></div>
+            <!--  Graph Output  -->
+            <div id="mynetwork"></div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <!----------------------------- Toast ------------------------------>
+    <!--  PathFinder(on page load)  -->
+    <div
+      id="shortcut-toast"
+      class="toast bg-info text-white"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+      data-autohide="false"
+      data-content="11000"
+    >
+      <div class="toast-header bg-info text-white">
+        <i class="fas fa-info-circle fa-lg mr-2"></i>
+        <strong class="mr-auto">PathFinder</strong>
+      </div>
+      <div class="toast-body">
+        <b><u>Hover</u></b> over icons for <u><b>Details</b></u>
+      </div>
+    </div>
+    <!--  PathFinder(on path completion)  -->
+    <div
+      id="info-toast"
+      class="toast bg-success text-white"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+      data-autohide="false"
+    >
+      <div class="toast-header bg-success text-white">
+        <i class="fas fa-info-circle fa-lg mr-2"></i>
+        <strong class="mr-auto">PathFinder</strong>
+      </div>
+      <div class="toast-body">
+        <b><u>Drag</u></b> the <b>Start/End</b> node to change the path in
+        realtime.
+      </div>
+    </div>
+    <!--  PathFinder(cannot reach end node)  -->
+    <div
+      id="fail-toast"
+      class="toast bg-danger text-white"
+      data-autohide="false"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+    >
+      <div class="toast-header bg-danger text-white">
+        <i class="fas fa-exclamation-triangle fa-lg mr-2"></i>
+        <strong class="mr-auto">PathFinder</strong>
+      </div>
+      <div class="toast-body">
+        <u><b>Unable to reach the End Node.</b></u
+        ><br />Please ensure the Start and End nodes are not completely
+        surrounded by walls.
+      </div>
+    </div>
+    <!--  Topological - cycle warning  -->
+    <div
+      id="fail-kahn-toast"
+      class="toast bg-danger text-white"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+      data-autohide="false"
+    >
+      <div class="toast-header bg-danger text-white">
+        <i class="fas fa-exclamation-triangle fa-lg mr-2"></i>
+        <strong class="mr-auto">Topological Sort</strong>
+      </div>
+      <div class="toast-body">
+        <b>Failed</b>, a <b><u>Cycle</u></b> exists.
+      </div>
+    </div>
+  </body>
+</html>
